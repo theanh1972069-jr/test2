@@ -1,0 +1,70 @@
+.teacher-view-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.teacher-view-content {
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    max-height: 80vh;
+    width: 500px;
+    max-width: 90%;
+    overflow-y: auto;
+}
+
+.teacher-view-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+}
+
+.teacher-view-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.teacher-view-group label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.teacher-view-group span {
+    color: #333;
+}
+
+.teacher-image-view {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.teacher-view-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.close-btn {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+    background-color: #d9363e;
+}
