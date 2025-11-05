@@ -46,10 +46,13 @@ const TeachersPage = () => {
   }, []);
 
   // Filtered teachers
-  const filteredTeachers = teachers.filter(t =>
-    t.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    t.firstname?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredTeachers = teachers.filter(t => {
+    const term = searchTerm.toLowerCase();
+    return (
+      t.fullname.toLowerCase().includes(term) ||
+      t.id.toString().toLowerCase().includes(term)
+    );
+  });
 
   // Pagination calculations
   const indexOfLastTeacher = currentPage * teachersPerPage;
