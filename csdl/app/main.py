@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated, List
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from passlib.context import CryptContext
+import bcrypt
+from fastapi import Form
 
 from app.database.database import engine, SessionLocal
 from app.database.base_class import Base as ModelBase
@@ -14,6 +17,7 @@ from app.models.class_ import Class
 from app.models.semester import Semester
 from app.models.student_class import StudentClass
 from app.models.subject import Subject
+from app.models.user import User
 
 from app.crud.crud_student import student_crud
 from app.crud.crud_teacher import teacher_crud
@@ -27,6 +31,7 @@ from app.schemas.class_ import ClassCreate, ClassInDB, ClassUpdate
 from app.schemas.semester import SemesterCreate, SemesterInDB, SemesterUpdate
 from app.schemas.student_class import StudentClassCreate, StudentClassInDB
 from app.schemas.subject import SubjectCreate, SubjectInDB
+from app.schemas.user import UserCreate, UserInDB, UserUpdate
 
 from app.routers import student, teacher, class_, semester, student_class
 
@@ -56,6 +61,17 @@ api_router.include_router(semester.router)
 api_router.include_router(student_class.router)
 
 app.include_router(api_router, prefix="/api")
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def hash_password(password: str):
+    password = password.encode('utf-8')[:72]  # giới hạn 72 byte
+    return bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
+
+
+def verify_password(plain_password: str, hashed: str):
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed.encode('utf-8'))
 
 
 def get_db():
@@ -390,3 +406,75 @@ def delete_subject(subject_id: int, db: Session = Depends(get_db)):
     db.delete(subject)
     db.commit()
     return None
+
+
+@app.get("/all-users/", response_model=List[UserInDB])
+def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return db.query(User).offset(skip).limit(limit).all()
+
+
+@app.get("/users/{user_id}", response_model=UserInDB)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@app.post("/users/", status_code=status.HTTP_201_CREATED, response_model=UserInDB)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    existing = db.query(User).filter(User.username == user.username).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    db_user = User(
+        username=user.username,
+        password=hash_password(user.password),
+        role=user.role
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@app.put("/users/{user_id}", response_model=UserInDB)
+def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Nếu người dùng cập nhật password thì phải hash lại
+    if user_update.password is not None:
+        db_user.password = hash_password(user_update.password)  # ✅ hash lại
+    if user_update.role is not None:
+        db_user.role = user_update.role
+
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    db.delete(db_user)
+    db.commit()
+    return None
+
+
+@app.post("/login")
+def login(username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(
+            status_code=400, detail="Invalid username or password")
+
+    if not verify_password(password, user.password):
+        raise HTTPException(
+            status_code=400, detail="Invalid username or password")
+
+    return {"message": "Login successful", "user_id": user.id, "role": user.role}

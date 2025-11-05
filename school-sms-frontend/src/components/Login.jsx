@@ -1,53 +1,70 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../style/Login.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Kiểm tra email và password (có thể thay bằng API call thực tế)
-    if (email && password) {
+    setError('');
+
+    try {
+      // Gửi dữ liệu đến FastAPI backend
+      const response = await axios.post(
+        'http://127.0.0.1:8000/login',
+        new URLSearchParams({
+          username: username,
+          password: password,
+        }),
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        }
+      );
+
+      // ✅ Nếu đăng nhập thành công
+      console.log('Login success:', response.data);
+
       // Lưu trạng thái đăng nhập
       localStorage.setItem('isAuthenticated', 'true');
-      
-      // Có thể lưu thêm thông tin user nếu cần
+      localStorage.setItem('userRole', response.data.role);
+      localStorage.setItem('userId', response.data.user_id);
       if (rememberMe) {
-        localStorage.setItem('userEmail', email);
+        localStorage.setItem('username', username);
       }
 
-      // Chuyển hướng đến trang dashboard
+      // Chuyển hướng đến dashboard
       navigate('/dashboard');
-    } else {
-      // Thông báo lỗi nếu cần
-      alert('Please enter email and password');
+    } catch (err) {
+      console.error('Login failed:', err);
+      setError('Sai tên đăng nhập hoặc mật khẩu!');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1 className='momo-signature-regular'>Student Management System</h1>
+        <h1 className="momo-signature-regular">Student Management System</h1>
         <div className="login-form">
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Email</label>
+              <label>Tên đăng nhập</label>
               <input
-                type="email"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Nhập tên đăng nhập"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
             <div className="form-group">
-              <label>Password</label>
+              <label>Mật khẩu</label>
               <input
                 type="password"
                 placeholder="*****"
@@ -71,6 +88,7 @@ const Login = () => {
               Login
             </button>
           </form>
+          {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
         </div>
       </div>
     </div>

@@ -141,7 +141,7 @@ const TeachersPage = () => {
     <div className="dashboard-content">
       <div className="header-wrapper">
         <div className="title-section">
-          <h1 className="centered-title">Information Teachers</h1>
+          <h1 className="centered-title">Manage Teachers</h1>
         </div>
         <div className="controls-section">
           <input
@@ -164,8 +164,7 @@ const TeachersPage = () => {
             <thead>
               <tr>
                 <th>S No</th>
-                <th>Full Name</th>
-                <th>First Name</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Actions</th>
@@ -176,7 +175,6 @@ const TeachersPage = () => {
                 <tr key={teacher.id}>
                   <td>{indexOfFirstTeacher + index + 1}</td>
                   <td>{teacher.fullname}</td>
-                  <td>{teacher.firstname || '-'}</td>
                   <td>{teacher.email}</td>
                   <td>{teacher.phone}</td>
                   <td>
@@ -190,6 +188,7 @@ const TeachersPage = () => {
               ))}
             </tbody>
           </table>
+
 
           {/* Pagination */}
           <div className="pagination">

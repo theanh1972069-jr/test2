@@ -146,7 +146,7 @@ const StudentsPage = () => {
         <div className="controls-section">
           <input
             type="text"
-            placeholder="Search By Student ID or Name"
+            placeholder="Search By Name"
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             className="search-input"
@@ -166,8 +166,8 @@ const StudentsPage = () => {
             <thead>
               <tr>
                 <th>S No</th>
+                <th>Student ID</th>
                 <th>Name</th>
-                <th>Guardian</th>
                 <th>Phone</th>
                 <th>Actions</th>
               </tr>
@@ -176,8 +176,8 @@ const StudentsPage = () => {
               {currentStudents.map((student, index) => (
                 <tr key={student.id}>
                   <td>{indexOfFirstStudent + index + 1}</td>
+                  <td>{student.student_id}</td>
                   <td>{student.fullname}</td>
-                  <td>{student.guardian}</td>
                   <td>{student.phone}</td>
                   <td className="actions">
                     <button

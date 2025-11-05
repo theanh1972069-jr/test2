@@ -5,3 +5,4 @@ from app.models.class_ import Class
 from app.models.student_class import StudentClass
 from app.models.semester import Semester
 from app.models.subject import Subject
+from app.models.user import User

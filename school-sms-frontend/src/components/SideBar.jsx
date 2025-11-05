@@ -7,9 +7,6 @@ const navItems = [
   { name: 'Students', icon: 'fas fa-graduation-cap', link: '/students' },
   { name: 'Teachers', icon: 'fas fa-chalkboard-teacher', link: '/teachers' },
   { name: 'Classes/Grades', icon: 'fas fa-school', link: '/classes' },
-  { name: 'Subjects', icon: 'fas fa-book', link: '/subjects' },
-  { name: 'School Years/Semesters', icon: 'fas fa-calendar-alt', link: '/semesters' },
-  { name: 'Settings', icon: 'fas fa-cog', link: '/settings' },
 ];
 
 const Sidebar = () => {
