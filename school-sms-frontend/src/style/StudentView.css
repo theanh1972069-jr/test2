@@ -61,3 +61,23 @@
 .close-btn:hover {
     background-color: #d9363e;
 }
+
+.student-classes-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.student-classes-scroll {
+    max-height: 200px;
+    /* chiều cao tối đa */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.student-classes-scroll .student-view-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}

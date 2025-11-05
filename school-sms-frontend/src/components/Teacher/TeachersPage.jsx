@@ -146,7 +146,7 @@ const TeachersPage = () => {
         <div className="controls-section">
           <input
             type="text"
-            placeholder="Search by Name"
+            placeholder="Search By Name"
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
             className="search-input"

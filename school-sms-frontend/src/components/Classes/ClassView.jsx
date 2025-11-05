@@ -1,67 +1,77 @@
 // ClassView.jsx
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../api/api';
-import '../../style/StudentView.css'; // Dùng lại CSS cũ
+import '../../style/ClassView.css';
 
 const ClassView = ({ isOpen, onClose, classItem }) => {
   const [students, setStudents] = useState([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [errorStudents, setErrorStudents] = useState(null);
 
-  // Fetch danh sách sinh viên của lớp
   useEffect(() => {
     if (isOpen && classItem) {
       const fetchStudents = async () => {
         try {
           setLoadingStudents(true);
           setErrorStudents(null);
-          // Gọi endpoint lấy danh sách sinh viên theo lớp
+
           const response = await apiClient.get(`/classes/${classItem.id}/students/`);
-          setStudents(response.data);
+          setStudents(response.data || []);
         } catch (err) {
-          console.error("Lỗi tải sinh viên:", err);
-          setErrorStudents("Không thể tải danh sách sinh viên của lớp này.");
+          console.error("Failed to load students:", err);
+          setErrorStudents("Failed to load students of this class.");
         } finally {
           setLoadingStudents(false);
         }
       };
       fetchStudents();
     } else {
-      setStudents([]); // Xóa dữ liệu khi modal đóng
+      setStudents([]);
     }
   }, [isOpen, classItem]);
 
   if (!isOpen || !classItem) return null;
 
+  const teacherName = students.length > 0 ? students[0].teacher_name : null;
+  const subjectName = students.length > 0 ? students[0].subject_name : null;
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Thông tin Lớp học: {classItem.name}</h2>
-        {/* Phần hiển thị sinh viên */}
-        <h3>Danh sách Sinh viên:</h3>
-        {loadingStudents && <p>Đang tải danh sách sinh viên...</p>}
+        <h2>Class Information: {classItem.name}</h2>
+
+        <div className="class-meta-lines">
+          <p className="meta-line"><span className="meta-label">Teacher:</span> {teacherName ?? <em>No data</em>}</p>
+          <p className="meta-line"><span className="meta-label">Subject:</span> {subjectName ?? <em>No data</em>}</p>
+        </div>
+
+        <h3>Student List:</h3>
+
+        {loadingStudents && <p>Loading students...</p>}
         {errorStudents && <p className="error-message">{errorStudents}</p>}
+
         {!loadingStudents && students.length > 0 ? (
           <table className="students-in-class-table">
             <thead>
               <tr>
-                <th>Mã SV</th>
-                <th>Họ tên</th>
+                <th>Student Code</th>
+                <th>Full Name</th>
               </tr>
             </thead>
             <tbody>
               {students.map(student => (
-                <tr key={student.student_id}> {/* ✅ Dùng student_id làm key */}
+                <tr key={student.student_id}>
                   <td>{student.student_id}</td>
-                  <td>{student.fullname}</td>
+                  <td>{student.student_name}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          !loadingStudents && <p>Lớp chưa có sinh viên.</p>
+          !loadingStudents && <p>No students in this class.</p>
         )}
-        <button onClick={onClose} className="close-btn">Đóng</button>
+
+        <button onClick={onClose} className="close-btn">Close</button>
       </div>
     </div>
   );

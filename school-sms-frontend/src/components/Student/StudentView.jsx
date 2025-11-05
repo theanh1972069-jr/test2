@@ -1,7 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../style/StudentView.css';
+import apiClient from '../../api/api';
 
 const StudentView = ({ isOpen, onClose, student }) => {
+    const [classes, setClasses] = useState([]);
+    const [loadingClasses, setLoadingClasses] = useState(false);
+
+    useEffect(() => {
+        if (isOpen && student) {
+            fetchStudentClasses(student.id);
+        }
+    }, [isOpen, student]);
+
+    const fetchStudentClasses = async (studentId) => {
+        try {
+            setLoadingClasses(true);
+            const response = await apiClient.get(`/students/${studentId}/classes/`);
+            setClasses(response.data);
+        } catch (err) {
+            console.error("Lỗi khi tải lớp của sinh viên:", err);
+            setClasses([]);
+        } finally {
+            setLoadingClasses(false);
+        }
+    };
+
     if (!isOpen || !student) return null;
 
     return (
@@ -54,6 +77,23 @@ const StudentView = ({ isOpen, onClose, student }) => {
                         <label>Admission Date</label>
                         <span>{student.admission_date}</span>
                     </div>
+                </div>
+
+                {/* --- Student Classes --- */}
+                <h2 style={{ marginTop: '30px' }}>Student Classes</h2>
+                <div className="student-view-grid">
+                    {loadingClasses ? (
+                        <div>Loading classes...</div>
+                    ) : classes.length === 0 ? (
+                        <div>No classes found</div>
+                    ) : (
+                        classes.map((cls, idx) => (
+                            <div key={idx} className="student-view-group">
+                                <label>{cls.subject_name}</label>
+                                <span>{cls.grade !== null ? cls.grade : '-'}</span>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 <div className="student-view-actions">

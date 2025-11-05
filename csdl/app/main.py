@@ -125,7 +125,7 @@ def get_dashboard_summary(db: DBSession):
 
 
 @app.get("/all-students/", response_model=List[StudentInDB])
-def get_all_students(skip: int = 0, limit: int = 100, db: DBSession = None):
+def get_all_students(skip: int = 0, limit: int = 1000, db: DBSession = None):
     return student_crud.get_multi(db, skip=skip, limit=limit)
 
 
@@ -143,7 +143,7 @@ def read_student(student_id: int, db: DBSession):
 
 
 @app.get("/all-students/", response_model=List[StudentInDB])
-def get_all_students(skip: int = 0, limit: int = 100, db: DBSession = None):
+def get_all_students(skip: int = 0, limit: int = 1000, db: DBSession = None):
     return student_crud.get_multi(db, skip=skip, limit=limit)
 
 
@@ -161,6 +161,44 @@ def delete_student(student_id: int, db: DBSession):
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     return None
+
+
+@app.get("/students/{student_id}/classes/")
+def get_classes_by_student(student_id: int, db: Session = Depends(get_db)):
+    """
+    Lấy tất cả lớp mà student tham gia, kèm teacher, subject và grade
+    """
+    results = (
+        db.query(
+            StudentClass,
+            Class.name.label("class_name"),
+            Teacher.fullname.label("teacher_name"),
+            Subject.name.label("subject_name")
+        )
+        .join(Class, StudentClass.class_id == Class.id)
+        .join(Teacher, StudentClass.teacher_id == Teacher.id)
+        .join(Subject, StudentClass.subject_id == Subject.id)
+        .filter(StudentClass.student_id == student_id)
+        .all()
+    )
+
+    if not results:
+        raise HTTPException(
+            status_code=404, detail="Không tìm thấy lớp nào cho student này")
+
+    response = []
+    for sc, class_name, teacher_name, subject_name in results:
+        response.append({
+            "class_id": sc.class_id,
+            "class_name": class_name,
+            "teacher_id": sc.teacher_id,
+            "teacher_name": teacher_name,
+            "subject_id": sc.subject_id,
+            "subject_name": subject_name,
+            "grade": sc.grade
+        })
+
+    return response
 
 
 @app.get("/all-teachers/", response_model=List[TeacherInDB])
@@ -267,14 +305,28 @@ def get_class_student_counts(db: Session = Depends(get_db)):
 @app.get("/classes/{class_id}/students/")
 def get_students_by_class(class_id: int, db: Session = Depends(get_db)):
     results = (
-        db.query(Student.student_id, Student.fullname)
+        db.query(
+            Student.student_id,
+            Student.fullname.label("student_name"),
+            Teacher.fullname.label("teacher_name"),
+            Subject.name.label("subject_name")
+        )
         .join(StudentClass, Student.id == StudentClass.student_id)
+        .join(Teacher, Teacher.id == StudentClass.teacher_id)
+        .join(Subject, Subject.id == StudentClass.subject_id)
         .filter(StudentClass.class_id == class_id)
         .all()
     )
 
-    # ✅ Chuyển đổi sang list[dict]
-    return [{"student_id": r.student_id, "fullname": r.fullname} for r in results]
+    return [
+        {
+            "student_id": r.student_id,
+            "student_name": r.student_name,
+            "teacher_name": r.teacher_name,
+            "subject_name": r.subject_name
+        }
+        for r in results
+    ]
 
 
 @app.get("/all-semesters/", response_model=List[SemesterInDB])

@@ -1,0 +1,32 @@
+.students-in-class-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.students-in-class-table th,
+.students-in-class-table td {
+    padding: 12px 16px;
+    /* tăng khoảng cách cả chiều dọc và ngang */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.students-in-class-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.students-in-class-table td {
+    color: #333;
+}
+
+.students-in-class-table td:first-child {
+    min-width: 150px;
+    /* cột Mã SV rộng ra để tên cách ra */
+}
+
+.students-in-class-table tr:hover {
+    background-color: #fafafa;
+    /* hiệu ứng hover cho dễ nhìn */
+}
