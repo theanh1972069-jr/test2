@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../style/StudentEdit.css'; // Dùng lại CSS cũ cho thống nhất
+import '../../style/StudentEdit.css';
 
 const ClassEdit = ({
     isOpen,
@@ -13,7 +13,6 @@ const ClassEdit = ({
         name: ''
     });
 
-    // Khi classItem được truyền vào → điền sẵn dữ liệu
     useEffect(() => {
         if (classItem) {
             setFormData({

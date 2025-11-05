@@ -37,9 +37,6 @@ const Dashboard = () => {
       {/* Overview Cards */}
       <div className="overview-cards">
         <div className="overview-card bg-teal">
-          <div className="card-icon">
-            {/* <i className="fas fa-users"></i> */}
-          </div>
           <div className="card-info">
             <h3>Total Students</h3>
             <p>{data?.totalStudents}</p>
@@ -47,9 +44,6 @@ const Dashboard = () => {
         </div>
 
         <div className="overview-card bg-yellow">
-          <div className="card-icon">
-            <i className="fas fa-building"></i>
-          </div>
           <div className="card-info">
             <h3>Total Teachers</h3>
             <p>{data?.totalTeachers}</p>
@@ -57,9 +51,6 @@ const Dashboard = () => {
         </div>
 
         <div className="overview-card bg-red">
-          <div className="card-icon">
-            <i className="fas fa-money-bill"></i>
-          </div>
           <div className="card-info">
             <h3>Total Classes</h3>
             <p>{data?.totalClasses}</p>
@@ -67,49 +58,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Leave Details Section */}
-      <h3>Leave Details</h3>
-      <div className="leave-details-cards">
-        <div className="detail-card bg-teal">
-          <div className="card-icon">
-            <i className="fas fa-file-alt"></i>
-          </div>
-          <div className="card-info">
-            <h4>Leave Applied</h4>
-            <p>{data?.leaveApplied || 2}</p>
-          </div>
-        </div>
-
-        <div className="detail-card bg-green">
-          <div className="card-icon">
-            <i className="fas fa-check-circle"></i>
-          </div>
-          <div className="card-info">
-            <h4>Leave Approved</h4>
-            <p>{data?.leaveApproved || 2}</p>
-          </div>
-        </div>
-
-        <div className="detail-card bg-yellow">
-          <div className="card-icon">
-            <i className="fas fa-hourglass-half"></i>
-          </div>
-          <div className="card-info">
-            <h4>Leave Pending</h4>
-            <p>{data?.leavePending || 1}</p>
-          </div>
-        </div>
-
-        <div className="detail-card bg-red">
-          <div className="card-icon">
-            <i className="fas fa-times-circle"></i>
-          </div>
-          <div className="card-info">
-            <h4>Leave Rejected</h4>
-            <p>{data?.leaveRejected || 1}</p>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };

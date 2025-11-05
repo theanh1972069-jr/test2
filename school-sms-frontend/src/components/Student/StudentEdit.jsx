@@ -21,7 +21,6 @@ const StudentEdit = ({
         admission_date: ''
     });
 
-    // Khi student được truyền vào, điền dữ liệu vào form
     useEffect(() => {
         if (student) {
             setFormData({

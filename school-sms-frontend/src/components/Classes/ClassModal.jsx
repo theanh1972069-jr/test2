@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../style/StudentModal.css'; // dùng lại cùng CSS cho đồng bộ
+import '../../style/StudentModal.css';
 
 const ClassModal = ({
     isOpen,

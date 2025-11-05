@@ -12,7 +12,7 @@ const TopBar = ({ userName }) => {
 
   return (
     <header className="top-bar">
-      <div className="welcome-message">Welcome, {userName}</div>
+      <div className="welcome-message">Welcome</div>
       <button className="logout-btn" onClick={handleLogout}>
         Logout
       </button>

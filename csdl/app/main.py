@@ -46,9 +46,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    # Cho phép tất cả các phương thức (GET, POST, PUT, DELETE)
     allow_methods=["*"],
-    allow_headers=["*"],  # Cho phép tất cả các header
+    allow_headers=["*"],
 )
 
 ModelBase.metadata.create_all(bind=engine)
@@ -108,10 +107,6 @@ def get_dashboard_summary(db: DBSession):
             "totalStudents": total_students,
             "totalTeachers": total_teachers,
             "totalClasses": total_classes,
-            "leaveApplied": 5,
-            "leaveApproved": 3,
-            "leavePending": 1,
-            "leaveRejected": 1,
         }
 
         return summary_data
@@ -140,11 +135,6 @@ def read_student(student_id: int, db: DBSession):
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
     return student
-
-
-@app.get("/all-students/", response_model=List[StudentInDB])
-def get_all_students(skip: int = 0, limit: int = 1000, db: DBSession = None):
-    return student_crud.get_multi(db, skip=skip, limit=limit)
 
 
 @app.put("/students/{student_id}", response_model=StudentInDB)
@@ -284,14 +274,9 @@ def delete_class(class_id: int, db: DBSession):
         raise HTTPException(status_code=404, detail="Class not found")
     return None
 
-# 🧮 Endpoint: Đếm số học sinh trong mỗi lớp
-
 
 @app.get("/class-student-counts")
 def get_class_student_counts(db: Session = Depends(get_db)):
-    """
-    Trả về danh sách tất cả lớp và số lượng học sinh trong từng lớp
-    """
     try:
         results = (
             db.query(
@@ -303,8 +288,6 @@ def get_class_student_counts(db: Session = Depends(get_db)):
             .group_by(Class.id, Class.name)
             .all()
         )
-
-        # Trả kết quả dạng list of dict
         data = [
             {"class_id": r.class_id, "class_name": r.class_name,
                 "student_count": r.student_count}
@@ -379,12 +362,6 @@ def delete_semester(semester_id: int, db: DBSession):
     return None
 
 
-@app.get("/all-student-classes/", response_model=List[StudentClassInDB])
-def get_all_student_classes(skip: int = 0, limit: int = 100, db: DBSession = None):
-    # return student_class_crud.get_multi(db, skip=skip, limit=limit)
-    return student_class_crud.get_multi_student_classes_with_student_info(db, skip=skip, limit=limit)
-
-
 @app.get("/all-student-classes/")
 def get_all_student_classes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return student_class_crud.get_multi_student_classes_with_student_info(db, skip=skip, limit=limit)
@@ -425,8 +402,6 @@ def delete_student_class(student_id: int, class_id: int, semester_id: int, db: D
 def get_all_subjects(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return db.query(Subject).offset(skip).limit(limit).all()
 
-# Lấy 1 subject theo id
-
 
 @app.get("/subjects/{subject_id}", response_model=SubjectInDB)
 def read_subject(subject_id: int, db: Session = Depends(get_db)):
@@ -434,8 +409,6 @@ def read_subject(subject_id: int, db: Session = Depends(get_db)):
     if not subject:
         raise HTTPException(status_code=404, detail="Subject not found")
     return subject
-
-# Tạo mới subject
 
 
 @app.post("/subjects/", status_code=status.HTTP_201_CREATED, response_model=SubjectInDB)
@@ -445,8 +418,6 @@ def create_subject(subject_create: SubjectCreate, db: Session = Depends(get_db))
     db.commit()
     db.refresh(db_subject)
     return db_subject
-
-# Cập nhật subject
 
 
 @app.put("/subjects/{subject_id}", response_model=SubjectInDB)
@@ -461,8 +432,6 @@ def update_subject(subject_id: int, subject_update: SubjectCreate, db: Session =
     db.commit()
     db.refresh(subject)
     return subject
-
-# Xóa subject
 
 
 @app.delete("/subjects/{subject_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -512,9 +481,8 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Nếu người dùng cập nhật password thì phải hash lại
     if user_update.password is not None:
-        db_user.password = hash_password(user_update.password)  # ✅ hash lại
+        db_user.password = hash_password(user_update.password)
     if user_update.role is not None:
         db_user.role = user_update.role
 

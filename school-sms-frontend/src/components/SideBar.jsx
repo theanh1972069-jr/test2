@@ -15,7 +15,7 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <header className="sidebar-header">
-        <h1 className="logo">SMS API</h1>
+        <h1 className="logo">School Management</h1>
       </header>
       <nav className="sidebar-nav">
         <ul>

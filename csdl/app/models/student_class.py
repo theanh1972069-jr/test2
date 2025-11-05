@@ -12,7 +12,6 @@ class StudentClass(Base):
     grade = Column(Float, nullable=True)
     subject_id = Column(ForeignKey('subjects.id'), nullable=False)
 
-    # student = relationship('Student', back_populates='classes')
     class_ = relationship('Class', back_populates='students')
     teacher = relationship('Teacher', back_populates='student_classes')
     student = relationship('Student', back_populates='student_enrollments')

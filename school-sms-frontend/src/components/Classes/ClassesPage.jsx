@@ -17,17 +17,14 @@ const ClassesPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const classesPerPage = 10;
 
-  // Fetch data
   const fetchClasses = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // Gọi 2 API song song: lấy danh sách lớp và số lượng học sinh
       const [classesRes, countsRes] = await Promise.all([
         apiClient.get('/all-classes/'),
         apiClient.get('/class-student-counts')
@@ -36,7 +33,6 @@ const ClassesPage = () => {
       const classData = classesRes.data;
       const countData = countsRes.data;
 
-      // Ghép dữ liệu
       const merged = classData.map(cls => {
         const countInfo = countData.find(c => c.class_id === cls.id);
         return {
@@ -58,12 +54,10 @@ const ClassesPage = () => {
     fetchClasses();
   }, []);
 
-  // Search filter
   const filteredClasses = classes.filter(cls =>
     cls.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Pagination logic
   const indexOfLastClass = currentPage * classesPerPage;
   const indexOfFirstClass = indexOfLastClass - classesPerPage;
   const currentClasses = filteredClasses.slice(indexOfFirstClass, indexOfLastClass);
@@ -94,7 +88,6 @@ const ClassesPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  // Add class
   const handleAddClass = async (formData) => {
     try {
       setIsSubmitting(true);
@@ -111,7 +104,6 @@ const ClassesPage = () => {
     }
   };
 
-  // Update class
   const handleUpdateClass = async (formData) => {
     if (!selectedClass) return;
     try {

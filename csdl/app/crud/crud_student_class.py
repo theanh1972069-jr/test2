@@ -7,8 +7,6 @@ from app.crud.base import CRUDBase
 
 
 class CRUDStudentClass:
-    # def get_multi(self, db: Session, skip: int = 0, limit: int = 100):
-    #     return db.query(StudentClass).offset(skip).limit(limit).all()
 
     def create(self, db: Session, obj_in: StudentClassCreate):
         db_obj = StudentClass(**obj_in.dict())
@@ -28,9 +26,6 @@ class CRUDStudentClass:
             .limit(limit)
             .all()
         )
-
-#    def get_multi_student_classes_with_student_info(self, db: Session, skip: int = 0, limit: int = 100):
-#        return db.query(StudentClass).options(joinedload(StudentClass.student)).offset(skip).limit(limit).all()
 
     def get(self, db: Session, student_id: int, class_id: int, subject_id: int):
         return db.query(StudentClass).filter(

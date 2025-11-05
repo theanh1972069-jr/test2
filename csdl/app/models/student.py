@@ -18,5 +18,5 @@ class Student(Base):
     guardian_phone = Column(String(15), nullable=True)
     admission_date = Column(Date, nullable=False, default=date.today)
 
-    # classes = relationship('StudentClass', back_populates='student')
-    student_enrollments = relationship('StudentClass', back_populates='student')
+    student_enrollments = relationship(
+        'StudentClass', back_populates='student')
