@@ -9,5 +9,3 @@ class Semester(Base):
     name = Column(String(50), unique=True, nullable=False)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
-
-    student_classes = relationship('StudentClass', back_populates='semester')

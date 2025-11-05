@@ -35,6 +35,7 @@
 // ClassView.jsx (Cần được tạo hoặc sửa đổi)
 import React, { useEffect, useState } from 'react';
 import apiClient from '../../api/api';
+import '../../style/StudentView.css'; // Dùng lại CSS cũ
 // Giả định bạn có một API endpoint để lấy sinh viên theo lớp
 // Ví dụ: GET /classes/{class_id}/students/
 
@@ -51,7 +52,7 @@ const ClassView = ({ isOpen, onClose, classItem }) => {
           setLoadingStudents(true);
           setErrorStudents(null);
           // *** CHỈNH SỬA ENDPOINT NÀY THEO BACKEND CỦA BẠN ***
-          const response = await apiClient.get(`/all-student-classes/`);
+          const response = await apiClient.get(`/classes/${classItem.id}/students/`);
           setStudents(response.data);
         } catch (err) {
           console.error("Lỗi tải sinh viên:", err);
@@ -72,12 +73,12 @@ const ClassView = ({ isOpen, onClose, classItem }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Thông tin Lớp học: {classItem.name}</h2>
-        
+
         {/* Phần hiển thị sinh viên */}
         <h3>Danh sách Sinh viên:</h3>
         {loadingStudents && <p>Đang tải danh sách sinh viên...</p>}
         {errorStudents && <p className="error-message">{errorStudents}</p>}
-        
+
         {!loadingStudents && students.length > 0 ? (
           <table className="students-in-class-table">
             <thead>

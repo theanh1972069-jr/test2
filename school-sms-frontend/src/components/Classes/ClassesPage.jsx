@@ -26,9 +26,26 @@ const ClassesPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiClient.get('/all-classes/');
-      if (!response.data) throw new Error('Không có dữ liệu từ server');
-      setClasses(response.data);
+
+      // Gọi 2 API song song: lấy danh sách lớp và số lượng học sinh
+      const [classesRes, countsRes] = await Promise.all([
+        apiClient.get('/all-classes/'),
+        apiClient.get('/class-student-counts')
+      ]);
+
+      const classData = classesRes.data;
+      const countData = countsRes.data;
+
+      // Ghép dữ liệu
+      const merged = classData.map(cls => {
+        const countInfo = countData.find(c => c.class_id === cls.id);
+        return {
+          ...cls,
+          student_count: countInfo ? countInfo.student_count : 0
+        };
+      });
+
+      setClasses(merged);
     } catch (err) {
       console.error("Chi tiết lỗi:", err);
       setError("Không thể tải danh sách lớp học");
@@ -143,6 +160,7 @@ const ClassesPage = () => {
               <tr>
                 <th>S No</th>
                 <th>Class Name</th>
+                <th>Students</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -151,6 +169,7 @@ const ClassesPage = () => {
                 <tr key={cls.id}>
                   <td>{indexOfFirstClass + index + 1}</td>
                   <td>{cls.name}</td>
+                  <td>{cls.student_count}</td>
                   <td className="actions">
                     <button
                       className="view-btn"
