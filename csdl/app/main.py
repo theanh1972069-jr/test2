@@ -163,6 +163,14 @@ def delete_student(student_id: int, db: DBSession):
     return None
 
 
+@app.get("/students/by-id/{student_id}", response_model=StudentInDB)
+def read_student_by_id(student_id: str, db: DBSession):
+    student = student_crud.get_by_student_id(db, student_id)
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    return student
+
+
 @app.get("/students/{student_id}/classes/")
 def get_classes_by_student(student_id: int, db: Session = Depends(get_db)):
     """
@@ -233,6 +241,14 @@ def delete_teacher(teacher_id: int, db: DBSession):
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")
     return None
+
+
+@app.get("/teachers/by-id/{teacher_id}", response_model=TeacherInDB)
+def read_teacher_by_id(teacher_id: str, db: DBSession):
+    teacher = teacher_crud.get_by_teacher_id(db, teacher_id)
+    if not teacher:
+        raise HTTPException(status_code=404, detail="Teacher not found")
+    return teacher
 
 
 @app.get("/all-classes/", response_model=List[ClassInDB])
