@@ -30,3 +30,26 @@
     background-color: #fafafa;
     /* hiệu ứng hover cho dễ nhìn */
 }
+
+.close-btn {
+    padding: 10px 16px;
+    background-color: #ff4d4f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: auto;
+    /* đẩy sang phải */
+    display: block;
+    /* đảm bảo nằm riêng hàng */
+}
+
+.close-btn:hover {
+    background-color: #d9363e;
+}
+
+.modal-content {
+    position: relative;
+    padding-bottom: 40px;
+    /* chừa chỗ đẹp cho nút */
+}
