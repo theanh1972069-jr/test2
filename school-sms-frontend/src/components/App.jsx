@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
-import Sidebar from './Sidebar';
+import Sidebar from './SideBar';
 import TopBar from './TopBar';
 import Dashboard from './Dashboard';
 import StudentsPage from './Student/StudentsPage';

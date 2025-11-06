@@ -30,7 +30,6 @@ class StudentBase(BaseModel):
     @field_validator("phone", mode="after")
     @classmethod
     def validate_phone(cls, value: str):
-        """Xác thực định dạng số điện thoại."""
         if not re.match(r"^\d{9,15}$", value):
             raise ValueError(
                 "Please enter a valid phone number (9-15 digits).")
@@ -39,7 +38,6 @@ class StudentBase(BaseModel):
     @field_validator("guardian_phone", mode="after")
     @classmethod
     def validate_guardian_phone(cls, value: Optional[str]):
-        """Xác thực định dạng số điện thoại người giám hộ (nếu có)."""
         if value is None or value == "":
             return None
 
@@ -51,7 +49,6 @@ class StudentBase(BaseModel):
     @field_validator("date_of_birth", "admission_date", mode="before")
     @classmethod
     def parse_date(cls, value):
-        """Chuyển đổi chuỗi ngày tháng thành đối tượng date."""
         if isinstance(value, date):
             return value
 

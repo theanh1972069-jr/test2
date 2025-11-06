@@ -13,18 +13,15 @@ class UserBase(BaseModel):
     role: UserRole
 
 
-# Dùng khi tạo user mới (đăng ký)
 class UserCreate(UserBase):
     password: str
 
 
-# Dùng khi cập nhật user
 class UserUpdate(BaseModel):
     password: str | None = None
     role: UserRole | None = None
 
 
-# Dùng khi trả dữ liệu ra ngoài API
 class UserInDB(UserBase):
     id: int
 
