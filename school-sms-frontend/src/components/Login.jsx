@@ -15,7 +15,6 @@ const Login = () => {
     setError('');
 
     try {
-      // Gửi dữ liệu đến FastAPI backend
       const response = await axios.post(
         'http://127.0.0.1:8000/login',
         new URLSearchParams({
@@ -27,10 +26,8 @@ const Login = () => {
         }
       );
 
-      // ✅ Nếu đăng nhập thành công
       console.log('Login success:', response.data);
 
-      // Lưu trạng thái đăng nhập
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('userRole', response.data.role);
       localStorage.setItem('userId', response.data.user_id);
@@ -38,33 +35,32 @@ const Login = () => {
         localStorage.setItem('username', username);
       }
 
-      // Chuyển hướng đến dashboard
       navigate('/dashboard');
     } catch (err) {
       console.error('Login failed:', err);
-      setError('Sai tên đăng nhập hoặc mật khẩu!');
+      setError('Incorrect username or password!');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1 className="momo-signature-regular">Student Management System</h1>
+        <h1 className="momo-signature-regular">School Management System</h1>
         <div className="login-form">
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Tên đăng nhập</label>
+              <label>Username</label>
               <input
                 type="text"
-                placeholder="Nhập tên đăng nhập"
+                placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
             <div className="form-group">
-              <label>Mật khẩu</label>
+              <label>Password</label>
               <input
                 type="password"
                 placeholder="*****"
