@@ -28,7 +28,7 @@ const TeacherModal = ({
         if (isSubmitting) return;
 
         if (!formData.fullname || !formData.firstname || !formData.phone || !formData.email) {
-            alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+            alert('Please fill in all required fields.');
             return;
         }
 

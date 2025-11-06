@@ -18,7 +18,7 @@ const StudentView = ({ isOpen, onClose, student }) => {
             const response = await apiClient.get(`/students/${studentId}/classes/`);
             setClasses(response.data);
         } catch (err) {
-            console.error("Lỗi khi tải lớp của sinh viên:", err);
+            console.error("Failed to load the student's class:", err);
             setClasses([]);
         } finally {
             setLoadingClasses(false);

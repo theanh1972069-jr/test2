@@ -51,7 +51,7 @@ const StudentEdit = ({
 
         // Kiểm tra dữ liệu bắt buộc
         if (!formData.student_id || !formData.fullname || !formData.firstname || !formData.date_of_birth || !formData.phone) {
-            alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+            alert('Please fill in all required fields.');
             return;
         }
 

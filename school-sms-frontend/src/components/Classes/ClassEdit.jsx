@@ -34,7 +34,7 @@ const ClassEdit = ({
         if (isSubmitting) return;
 
         if (!formData.name.trim()) {
-            alert('Vui lòng nhập tên lớp học!');
+            alert('Please enter the class name.');
             return;
         }
 

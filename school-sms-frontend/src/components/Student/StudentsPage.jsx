@@ -30,11 +30,11 @@ const StudentsPage = () => {
       setLoading(true);
       setError(null);
       const response = await apiClient.get('/all-students/');
-      if (!response.data) throw new Error('Không có dữ liệu từ server');
+      if (!response.data) throw new Error('No data received');
       setStudents(response.data);
     } catch (err) {
-      console.error("Chi tiết lỗi:", err);
-      setError("Không thể tải danh sách sinh viên");
+      console.error("Error detail:", err);
+      setError("Failed to load students");
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ const StudentsPage = () => {
       setIsModalOpen(false);
     } catch (err) {
       console.error('Error adding student:', err.response?.data || err.message);
-      setSubmitError(err.response?.data?.detail || 'Lỗi khi thêm sinh viên');
+      setSubmitError(err.response?.data?.detail || 'Failed to add student');
     } finally {
       setIsSubmitting(false);
     }
@@ -131,7 +131,7 @@ const StudentsPage = () => {
       setSelectedStudent(null);
     } catch (err) {
       console.error('Error updating student:', err.response?.data || err.message);
-      setSubmitError(err.response?.data?.detail || 'Lỗi khi cập nhật sinh viên');
+      setSubmitError(err.response?.data?.detail || 'Failed to update student');
     } finally {
       setIsSubmitting(false);
     }
@@ -201,7 +201,7 @@ const StudentsPage = () => {
                     <button
                       className="delete-btn"
                       onClick={async () => {
-                        if (window.confirm('Bạn có chắc muốn xóa sinh viên này?')) {
+                        if (window.confirm('Are you sure you want to delete this student?')) {
                           await apiClient.delete(`/students/${student.id}`);
                           await fetchStudents();
                         }

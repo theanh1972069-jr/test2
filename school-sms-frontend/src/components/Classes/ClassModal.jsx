@@ -24,7 +24,7 @@ const ClassModal = ({
         if (isSubmitting) return;
 
         if (!formData.name.trim()) {
-            alert('Vui lòng nhập tên lớp!');
+            alert('Please enter the class name.');
             return;
         }
 

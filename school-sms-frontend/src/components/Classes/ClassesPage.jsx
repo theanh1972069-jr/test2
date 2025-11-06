@@ -43,8 +43,8 @@ const ClassesPage = () => {
 
       setClasses(merged);
     } catch (err) {
-      console.error("Chi tiết lỗi:", err);
-      setError("Không thể tải danh sách lớp học");
+      console.error("Error detail:", err);
+      setError("Failed to load classes");
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ const ClassesPage = () => {
       setIsModalOpen(false);
     } catch (err) {
       console.error('Error adding class:', err.response?.data || err.message);
-      setSubmitError(err.response?.data?.detail || 'Lỗi khi thêm lớp');
+      setSubmitError(err.response?.data?.detail || 'Failed to add class');
     } finally {
       setIsSubmitting(false);
     }
@@ -116,7 +116,7 @@ const ClassesPage = () => {
       setSelectedClass(null);
     } catch (err) {
       console.error('Error updating class:', err.response?.data || err.message);
-      setSubmitError(err.response?.data?.detail || 'Lỗi khi cập nhật lớp');
+      setSubmitError(err.response?.data?.detail || 'Failed to update class');
     } finally {
       setIsSubmitting(false);
     }
@@ -184,7 +184,7 @@ const ClassesPage = () => {
                     <button
                       className="delete-btn"
                       onClick={async () => {
-                        if (window.confirm('Bạn có chắc muốn xóa lớp học này?')) {
+                        if (window.confirm('Are you sure you want to delete this class?')) {
                           await apiClient.delete(`/classes/${cls.id}`);
                           await fetchClasses();
                         }

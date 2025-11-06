@@ -28,14 +28,14 @@ const TeachersPage = () => {
       setLoading(true);
       setError(null);
       const response = await apiClient.get('/all-teachers/');
-      if (!response.data) throw new Error('Không có dữ liệu từ server');
+      if (!response.data) throw new Error('No data received');
       setTeachers(response.data);
     } catch (err) {
-      console.error("Chi tiết lỗi:", {
+      console.error("Error detail:", {
         message: err.response?.data?.detail || err.message,
         status: err.response?.status
       });
-      setError("Không thể tải danh sách giảng viên");
+      setError("Failed to fetch teachers. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -111,8 +111,8 @@ const TeachersPage = () => {
       setTeachers(prev => [...prev, response.data]);
       closeAddModal();
     } catch (err) {
-      console.error("Lỗi thêm teacher:", err);
-      setSubmitError(err.response?.data?.detail || 'Có lỗi xảy ra');
+      console.error("Failed to add teacher", err);
+      setSubmitError(err.response?.data?.detail || 'Error occurred');
     } finally { setIsSubmitting(false); }
   };
 
@@ -124,19 +124,19 @@ const TeachersPage = () => {
       setTeachers(prev => prev.map(t => t.id === selectedTeacher.id ? response.data : t));
       closeEditModal();
     } catch (err) {
-      console.error("Lỗi chỉnh sửa teacher:", err);
-      setSubmitError(err.response?.data?.detail || 'Có lỗi xảy ra');
+      console.error("Failed to edit teacher", err);
+      setSubmitError(err.response?.data?.detail || 'Error occurred');
     } finally { setIsSubmitting(false); }
   };
 
   const handleDeleteTeacher = async (teacherId) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa giảng viên này?')) return;
+    if (!window.confirm('Are you sure you want to remove this teacher?')) return;
     try {
       await apiClient.delete(`/teachers/${teacherId}/`);
       setTeachers(prev => prev.filter(t => t.id !== teacherId));
     } catch (err) {
-      console.error("Lỗi xóa teacher:", err);
-      alert('Xóa không thành công!');
+      console.error("Error occured", err);
+      alert('Failed to delete teacher. Please try again.');
     }
   };
 

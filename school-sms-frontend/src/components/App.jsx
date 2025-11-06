@@ -12,7 +12,7 @@ import ClassesPage from './Classes/ClassesPage';
 import SemestersPage from './SemestersPage';
 import '../style/Dashboard.css';
 
-// ✅ ProtectedRoute: chỉ cho phép truy cập nếu đã đăng nhập
+//ProtectedRoute: chỉ cho phép truy cập nếu đã đăng nhập
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated');
   if (!isAuthenticated) {
@@ -21,7 +21,7 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// ✅ Các trang phụ
+//Các trang phụ
 const SubjectsPage = () => (
   <div className="dashboard-content">
     <h2>Subjects Management</h2>
@@ -36,7 +36,7 @@ const SettingsPage = () => (
   </div>
 );
 
-// ✅ App chính
+//App chính
 const App = () => {
   return (
     <Routes>

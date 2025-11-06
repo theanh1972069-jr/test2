@@ -42,7 +42,7 @@ const TeacherEdit = ({
 
         // Kiểm tra dữ liệu bắt buộc
         if (!formData.fullname || !formData.firstname || !formData.email || !formData.phone) {
-            alert('Vui lòng điền đầy đủ thông tin bắt buộc!');
+            alert('Please fill in all required fields.');
             return;
         }
 
