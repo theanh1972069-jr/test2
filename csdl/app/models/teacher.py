@@ -11,4 +11,5 @@ class Teacher(Base):
     phone = Column(String(15), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
 
-    student_classes = relationship('StudentClass', back_populates='teacher')
+    student_classes = relationship(
+        'StudentClass', back_populates='teacher', cascade='all, delete-orphan', passive_deletes=True)

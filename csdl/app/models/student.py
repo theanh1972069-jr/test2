@@ -19,4 +19,4 @@ class Student(Base):
     admission_date = Column(Date, nullable=False, default=date.today)
 
     student_enrollments = relationship(
-        'StudentClass', back_populates='student')
+        'StudentClass', back_populates='student', cascade='all, delete-orphan', passive_deletes=True)

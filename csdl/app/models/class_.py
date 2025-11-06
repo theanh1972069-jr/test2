@@ -8,4 +8,5 @@ class Class(Base):
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)
 
-    students = relationship('StudentClass', back_populates='class_')
+    students = relationship('StudentClass', back_populates='class_',
+                            cascade='all, delete-orphan', passive_deletes=True)

@@ -10,4 +10,5 @@ class Subject(Base):
     subject_id = Column(String(50), nullable=False, unique=True, index=True)
     name = Column(String(100), nullable=False)
 
-    student_classes = relationship('StudentClass', back_populates='subject')
+    student_classes = relationship(
+        'StudentClass', back_populates='subject', cascade='all, delete-orphan', passive_deletes=True)
